@@ -63,14 +63,12 @@ for page in pages:
 
 	#table 1 loan information
 	rows=tables[loanTable_Index].find_all('tr')
-	loanTable_Index=0
-
 	columns_header= rows[0].find_all('td')
 	columns_data = rows[1].find_all('td')
 	loaninfo={}
 	cur=0
 	while cur < len(columns_header):
-		key=columns_header[cur].get_text().strip().replace(" ","_")
+		key=columns_header[cur].get_text().strip().replace(" ","_").replace("\n","_")
 		value = columns_data[cur].get_text().strip()
 		if value[0] == "$":
 			value = int(value.replace("$","").replace(",",""))
@@ -85,5 +83,42 @@ for page in pages:
 		rdate = datetime.datetime.now().strftime("%Y-%m-%d")
 	loaninfo.update({"request_date": rdate})
 	print(loaninfo)
-	#import pdb;pdb.set_trace()
+
+
+	#table2 borrow information
+	rows=tables[loanTable_Index+1].find_all('tr')
+	for row in rows:
+		columns = row.find_all('td')
+		cur=0
+		while cur < len(columns):
+			#import pdb;pdb.set_trace()
+			key = columns[cur].get_text().strip().replace(" ","_").replace("\n", "_")
+			value = columns[cur+1].get_text().strip()
+			if value[0] == "$":
+				value = int(value.split("/")[0].replace("$","").replace(",",""))
+			elif value[-1] == "%":
+				value = round(float(value.replace("%",""))/100,2)
+			loaninfo[key]=value
+			cur += 2
+		print(loaninfo)
+
+	#table3 borrow credit
+	rows=tables[loanTable_Index+2].find_all('tr')
+	for row in rows:
+		columns = row.find_all('td')
+		cur=0
+		while cur < len(columns):
+			#import pdb;pdb.set_trace()
+			key = columns[cur].get_text().strip().replace(" ","_").replace("\n", "_")
+			value = columns[cur+1].get_text().strip()
+			if value[0] == "$":
+				value = int(value.replace("$","").replace(",","").split(".")[0])
+			elif value[-1] == "%":
+				value = round(float(value.replace("%",""))/100,2)
+			elif value.isdigit():
+				value=int(value)
+			loaninfo[key]=value
+			cur += 2
+		print(loaninfo)
+	loanTable_Index = 0
 
