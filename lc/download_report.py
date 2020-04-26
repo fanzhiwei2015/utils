@@ -29,9 +29,12 @@ if os.path.exists(checked_links_file):
 
 
 f_checked_links=open(checked_links_file,"a+")
+link_cur=1
 for link in links:
+
     time.sleep(0.5)
     link_href=link.attrs["href"]
+    print("checking link %d %s" % (link_cur, link_href))
     #import pdb;pdb.set_trace()
     if link_href in checked_links:
         continue
@@ -65,7 +68,7 @@ for link in links:
             traceback.print_exc()
             #print(tb)
         #import pdb;pdb.set_trace()
-
+    link_cur +=1
 
 
 
