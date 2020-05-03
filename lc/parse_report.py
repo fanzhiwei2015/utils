@@ -13,24 +13,6 @@ from elasticsearch import Elasticsearch, helpers
 # declare a client instance of the Python Elasticsearch library
 client = Elasticsearch("localhost:9200")
 
-# def month_to_number(m):
-# 	mapping={
-# 		"January":1,
-# 		"February":2,
-# 		"March":3,
-# 		"April":4,
-# 		"May":5,
-# 		"June": 6,
-# 		"July": 7,
-# 		"August": 8,
-# 		"September": 9,
-# 		"Octor": 10,
-# 		"November": 11,
-# 		"December": 12,
-# 		}
-# 	if m not in mapping:
-# 		import pdb;pdb.set_trace()
-# 	return mapping[m]
 
 def get_request_date(line):
 	lines=line.split(" ")
@@ -53,8 +35,8 @@ class Parse_report:
 		)
 
 		# print the response returned by Elasticsearch
-		print("helpers.bulk() RESPONSE:", resp)
-		print("helpers.bulk() RESPONSE:", json.dumps(resp, indent=4))
+		print("helpers.bulk() RESPONSE:", resp, flush=True)
+		print("helpers.bulk() RESPONSE:", json.dumps(resp, indent=4), flush=True)
 
 	def run_parse_post(self):
 		pages=[]
@@ -157,7 +139,7 @@ class Parse_report:
 				#print(loaninfo)
 
 			self.loansinfo.append(loaninfo)
-			print("post", loaninfo["Member_Loan_ID"],"added")
+			#print("post", loaninfo["Member_Loan_ID"],"added")
 			loanTable_Index = 0
 
 	def run_parse_sale(self):
@@ -257,13 +239,13 @@ class Parse_report:
 				#print(loaninfo)
 
 			self.loansinfo.append(loaninfo)
-			print("sales", loaninfo["Series_of_Member_Payment_Dependent_Notes"],"added")
+			#print("sales", loaninfo["Series_of_Member_Payment_Dependent_Notes"],"added")
 			loanTable_Index = 0
 
 
 if __name__ == "__main__":
 	filename = sys.argv[1]
-	print("parsing report %s" % filename)
+	print("parsing report %s" % filename, flush=True)
 
 	report=Parse_report(filename)
 	report.run_parse()
